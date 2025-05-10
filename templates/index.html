@@ -8,15 +8,35 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+  <!-- Add this right after <body> or top of <main> -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert-box" id="alertBox">
+      {{ messages[0] }}
+    </div>
+    <script>
+      // Auto-hide alert after 3 seconds
+      setTimeout(() => {
+        const alertBox = document.getElementById('alertBox');
+        if (alertBox) alertBox.style.display = 'none';
+      }, 3000);
+    </script>
+  {% endif %}
+{% endwith %}
     <header>
         <nav class="navbar">
             <img src="/static/img/logo.png" width="150px">
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/predict">Predict</a></li>
-                <li><a href="/upload">Upload</a></li>
-                <li><a href="/about">About</a></li>
-            </ul>
+     <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/predict">Predict</a></li>
+    <li><a href="/upload">Upload</a></li>
+    <li><a href="/about">About</a></li>
+    {% if session.get('username') %}
+        <li><a href="/logout">Logout</a></li>
+    {% else %}
+        <li><a href="/login">Sign In</a></li>
+    {% endif %}
+</ul>
         </nav>
     </header>
     <section class="second-set">

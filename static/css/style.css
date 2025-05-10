@@ -47,7 +47,7 @@ padding-left:20px;
 }
 .second-set{
     padding-top: 75px;
-    background: url('/static/img/car.png') no-repeat center center/cover;
+    background: url('/static/img/car1.jpeg') no-repeat center center/cover;
     min-height: 90vh;
     display: flex;
     position: relative;
@@ -68,9 +68,9 @@ padding-left:20px;
     font-weight: 600;
 }
 .btn {
-    background-color: #1d1e20;
+    background-color: #d9dadc;
     padding: 15px 20px;
-    color: white;
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 8px;
     margin-top: 20px;
@@ -350,4 +350,23 @@ body {
 }
 #f2{
   margin-bottom: 70px;
+}
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #00b894; /* Greenish */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; top: 10px; }
+  to { opacity: 1; top: 20px; }
 }

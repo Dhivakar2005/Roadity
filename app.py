@@ -1,18 +1,92 @@
-from flask import Flask, render_template, request, redirect, send_file
-import pandas as pd
-import pickle
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+import sqlite3
 import io
 import matplotlib.pyplot as plt
 import seaborn as sns
 import base64
 import google.generativeai as genai
-
+import pandas as pd
+import pickle
 
 app = Flask(__name__)
+app.secret_key = '0b156cf09f4198b95a66a9071d0231d3ebdaec504ad1035b31b252037c747c29'
 
-# Load the model
+# Load ML model
 model = pickle.load(open('accident_model.pkl', 'rb'))
 
+# Features expected by the model
+features = [
+    'driver_age', 'speed_limit', 'weather', 'road_condition',
+    'road_type', 'lighting', 'vehicle_type', 'traffic_volume'
+]
+
+# ============ DATABASE SETUP ============
+def init_db():
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
+    c.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("dhivakar", "test123"))
+    c.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ("admin", "adminpass"))
+    conn.commit()
+    conn.close()
+
+init_db()
+
+# ============ AUTH ROUTES ============
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        with sqlite3.connect("users.db") as conn:
+            cur = conn.cursor()
+            try:
+                cur.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+                conn.commit()
+                flash("Signup successful! Please log in.")
+                return redirect(url_for('login'))
+            except sqlite3.IntegrityError:
+                error = "Username already exists!"
+
+    return render_template('signup.html', error=error)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        with sqlite3.connect("users.db") as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+            user = cur.fetchone()
+
+        if user:
+            session['username'] = username
+            flash("Login successful!")
+            return redirect(url_for('predict'))
+        else:
+            error = "Invalid username or password."
+
+    return render_template('login.html', error=error)
+
+
+# ============ MAIN ROUTES ============
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # Configure Gemini
 genai.configure(api_key="AIzaSyC4QV74nGCIRfHU8fwxGIupc4kpBCQK9YU")
@@ -98,43 +172,12 @@ features = [
     'traffic_volume'
 ]
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/predict', methods=['GET', 'POST'])
-def predict():
-    suggestion = None
-    result = None
-
-    if request.method == 'POST':
-        data = {feat: request.form[feat] for feat in features}
-        df = pd.DataFrame([data])
-        prediction = model.predict(df)[0]
-        result = '🚨 Accident will be likely' if prediction == 1 else '✅ Accident is unlikely'
-
-        # Extract relevant features
-        driver_age = int(data['driver_age'])
-        speed_limit = int(data['speed_limit'])
-        weather = data['weather']
-        road_condition = data['road_condition']
-        traffic_volume = data['traffic_volume']
-        lighting = data['lighting']
-
-        # Generate suggestion using local function
-        suggestion = generate_safety_recommendation(driver_age, speed_limit, weather, road_condition, traffic_volume, lighting)
-
-    return render_template('predict.html', result=result, suggestion=suggestion)
-
-
-
 
 def fig_to_base64(plt_obj):
     img = io.BytesIO()
     plt_obj.savefig(img, format='png')
     img.seek(0)
     return base64.b64encode(img.read()).decode('utf-8')
-
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -172,11 +215,43 @@ def upload():
     return render_template('upload.html', graph=None)
 
 
+@app.route('/predict', methods=['GET', 'POST'])
+def predict():
+    if 'username' not in session:
+        flash("Please log in to continue.")
+        return redirect(url_for('login'))
+
+    result = None
+    suggestion = None  # ✅ Safely define this first
+
+    if request.method == 'POST':
+        data = {feat: request.form[feat] for feat in features}
+        df = pd.DataFrame([data])
+        prediction = model.predict(df)[0]
+        result = '🚨 Accident likely' if prediction == 1 else '✅ Accident unlikely'
+
+        driver_age = int(data['driver_age'])
+        speed_limit = int(data['speed_limit'])
+        weather = data['weather']
+        road_condition = data['road_condition']
+        traffic_volume = data['traffic_volume']
+        lighting = data['lighting']
+
+        suggestion = generate_safety_recommendation(driver_age, speed_limit, weather, road_condition, traffic_volume, lighting)
+
+    return render_template('predict.html', result=result, suggestion=suggestion)
+
 
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    flash("You have been logged out. Please log in to continue.")
+    return redirect(url_for('home'))  # ✅ go to home instead of predict
 
+# ============ START APP ============
 if __name__ == '__main__':
     app.run(debug=True)

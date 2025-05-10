@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="/static/log.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .hidden { display: none; }
+    /* Add this line if not already in your CSS file */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-section">
+        <img src="/static/img/logo.png" width="150px" class="im">
+      <h2>Welcome</h2>
+      <div class="phone-image">
+        <img src="static\img\road.png" alt="Phone Graphic" />
+      </div>
+      <p>Accident Predicting System</p>
+    </div>
+
+    <div class="login-section">
+          <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="flash-messages">
+                  {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+<form method="POST">
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username" required>
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+
+    <button type="submit">Login</button>
+</form>
+
+         {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+          <a href="{{ url_for('signup') }}">Don't have an account? Sign Up</a>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="form hidden">
+        <h2>SIGN UP</h2>
+        <div class="input-group">
+          <input type="text" placeholder="Full Name" required />
+          <span class="icon">&#128100;</span>
+        </div>
+        <div class="input-group">
+          <input type="email" placeholder="Email" required />
+          <span class="icon">&#9993;</span>
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="Username" required />
+          <span class="icon">&#128100;</span>
+        </div>
+        <div class="input-group">
+          <input type="password" placeholder="Password" required />
+          <span class="icon">&#128274;</span>
+        </div>
+        <button type="submit">Sign Up</button>
+        <div class="links">
+          <a href="login.html">Already have an account?</a>
+        </div>
+    </div>
+  </div>
+
+</body>
+</html>

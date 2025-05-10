@@ -14,6 +14,11 @@
                 <li><a href="/predict">Predict</a></li>
                 <li><a href="/upload">Upload</a></li>
                 <li><a href="/about">About</a></li>
+                                {% if session.logged_in %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Sign In</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
@@ -21,6 +26,9 @@
     <div class="predict-wrapper">
         <section class="form-section">
             <h2>🔍 Predict Accident Risk</h2>
+                        {% if error %}
+                <div class="error-message">{{ error }}</div>
+            {% endif %}
             <form method="POST" action="/predict" class="predict-form">
                 <div class="input-grid">
                     <input type="number" name="driver_age" placeholder="Driver Age" required>
@@ -72,6 +80,15 @@
                   </div>
             {% endif %}
         </section>
+        {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
     </div>
 </section>
 <footer class="footer">
