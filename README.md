@@ -38,7 +38,7 @@ The model takes the following features as input:
 - **AI Suggestions:** Gemini API
 
 ## 📁 Project Structure
-      ```bash
+      
       Rodity/
       ├── static/ # CSS, JS, Images
       ├── templates/ # HTML Templates (login.html, predict.html, etc.)
