@@ -38,15 +38,15 @@ The model takes the following features as input:
 - **AI Suggestions:** Gemini API
 
 ## 📁 Project Structure
-
-Rodity/
-├── static/ # CSS, JS, Images
-├── templates/ # HTML Templates (login.html, predict.html, etc.)
-├── app.py # Flask Application
-├── accident_model.pkl # Trained ML Model
-├── user.db # SQLite Database
-├── README.md # Project Documentation
-└── requirements.txt # Python Dependencies
+      ```
+      Rodity/
+      ├── static/ # CSS, JS, Images
+      ├── templates/ # HTML Templates (login.html, predict.html, etc.)
+      ├── app.py # Flask Application
+      ├── accident_model.pkl # Trained ML Model
+      ├── user.db # SQLite Database
+      ├── README.md # Project Documentation
+      └── requirements.txt # Python Dependencies
 
 
 ## 🚀 How to Run Locally
@@ -77,11 +77,11 @@ Rodity/
   - Improve accuracy with advanced ML models 
 
 ## 👨🏻‍💻Team Members
->  -Dhivakar G
->  -Santhosh S
->  -Siva E
->  -Baranidharan A
->  -Sathish B
+>  - Dhivakar G
+>  - Santhosh S
+>  - Siva E
+>  - Baranidharan A
+>  - Sathish B
   
 ## 🫱🏻‍🫲🏻 Contribution
 Pull requests and feature suggestions are welcome! Feel free to fork the repo and improve Rodity.
