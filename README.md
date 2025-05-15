@@ -54,7 +54,7 @@ The model takes the following features as input:
 
 1. **Clone the repository**
    ```bash
-   [git clone https://github.com/your-username/rodity.git](https://github.com/Dhivakar2005/Roadity.git)
+   https://github.com/Dhivakar2005/Roadity.git
    cd rodity
 
 2. **Install dependencies**
