@@ -1,7 +1,5 @@
 # 🚦 Rodity: Road Accident Predictor and Analyzer
 
-## 🔍 Overview
-
 Rodity is a web-based application that leverages machine learning to predict and analyze road accident severity based on various real-world factors. It helps users understand how different conditions affect road safety, enabling proactive measures for accident prevention.
 
 ## 🧠 Features
