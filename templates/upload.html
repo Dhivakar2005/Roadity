@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="static\img\favicon.png" type="image/png">
+    <title>Rodity</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body{
+            background: #4374a5;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .drop-zone {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background-color: #f0f0f0;
+        }
+
+        .drop-zone.dragover {
+            background-color: #e0eaff;
+            border-color: #2575fc;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .eda-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .eda-graphs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .eda-img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            max-height: 300px;
+        }
+
+        .download-btn {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .form-section h2{
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar-1">
+            <img src="/static/img/logo.png" width="150px">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/predict">Predict</a></li>
+                <li><a href="/upload">Upload</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="cd">
+        <div class="upload-wrapper">
+            <section class="form-section">
+                <h2>📄 Bulk Upload for Predictions</h2>
+
+                <form method="POST" action="/upload" enctype="multipart/form-data" class="upload-form">
+                    <div class="drop-zone" id="drop-zone">
+                        📁 Drag & Drop CSV Here or Click to Upload
+                        <input id="file-upload" type="file" name="file" accept=".csv" required hidden>
+                        <div id="file-name" class="file-name"></div>
+                    </div>
+                    <button class="btn" type="submit">Upload & Predict</button>
+                </form>
+
+                {% if graph %}
+                <div class="eda-section">
+                    <h3>📊 EDA Visualizations</h3>
+                    <div class="eda-graphs">
+                        <img src="data:image/png;base64,{{ graph }}" class="eda-img" alt="Accident Risk Chart">
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if b64_csv %}
+                <div class="download-btn">
+                    <a href="data:text/csv;base64,{{ b64_csv }}" download="{{ filename }}">
+                        <button class="btn">⬇️ Download Predictions</button>
+                    </a>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </section>
+
+    <footer class="footer-u">
+        <div class="footer-container">
+            <div class="footer-section about">
+                <h2>Smart Road Accident Predictor</h2>
+                <p>
+                    Predicting and preventing road accidents with AI technology.
+                    Making roads safer through advanced data analysis.
+                </p>
+            </div>
+            <div class="ft">
+            <div class="footer-section">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/predict">Predict</a></li>
+                    <li><a href="/upload">Upload</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section" id="f1">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section" id="f2">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+         </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Smart Road Accident Predictor. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                fileNameDisplay.textContent = `📄 Selected File: ${fileInput.files[0].name}`;
+            }
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                fileNameDisplay.textContent = `📄 Selected File: ${e.dataTransfer.files[0].name}`;
+            }
+        });
+    </script>
+</body>
+</html>

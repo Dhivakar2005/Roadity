@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static\img\favicon.png" type="image/png">
+    <title>Rodity</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert-box" id="alertBox">
+          {{ messages[0] }}
+        </div>
+        <script>
+          // Auto-hide alert after 3 seconds
+          setTimeout(() => {
+            const alertBox = document.getElementById('alertBox');
+            if (alertBox) alertBox.style.display = 'none';
+          }, 3000);
+        </script>
+      {% endif %}
+    {% endwith %}
+    <header>
+        <nav class="navbar">
+            <img src="/static/img/logo.png" width="150px">
+     <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/predict">Predict</a></li>
+    <li><a href="/upload">Upload</a></li>
+    <li><a href="/about">About</a></li>
+    {% if session.get('username') %}
+        <li><a href="/logout">Logout</a></li>
+    {% else %}
+        <li><a href="/login">Sign In</a></li>
+    {% endif %}
+</ul>
+        </nav>
+    </header>
+    <section class="second-set">
+        <div class="overlay">
+            <h1 class="head">Smart Road Accident Predictor</h1>
+            <p class="para">Using advanced AI to predict and prevent road accidents. Make informed decisions and improve road safety with data-driven insights.</p>
+            <a href="/predict" class="btn">Start Predicting</a>
+        </div>
+    </section>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="card">
+        <div class="icon blue">👤</div>
+        <h3>Input Conditions</h3>
+        <p>Enter the road, weather, and vehicle conditions to get started with your prediction. Our system processes multiple variables for accurate results.</p>
+      </div>
+      <div class="card">
+        <div class="icon green">📷</div>
+        <h3>AI Analysis</h3>
+        <p>Our advanced AI model processes the data through multiple layers of neural networks to generate accurate risk predictions.</p>
+      </div>
+      <div class="card">
+        <div class="icon purple">📊</div>
+        <h3>Visualization</h3>
+        <p>View detailed maps and charts showing accident hotspots and risk distributions to make informed decisions about road safety.</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
+    <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-section about">
+            <h2>Smart Road Accident Predictor</h2>
+            <p>
+              Predicting and preventing road accidents with AI technology.
+              Making roads safer through advanced data analysis.
+            </p>
+          </div>
+        <div class="ft">
+          <div class="footer-section" id="f3">
+            <h3>Navigation</h3>
+            <ul>
+              <li><a href="/index">Home</a></li>
+              <li><a href="/predict">Predict</a></li>
+              <li><a href="/upload">Upload</a></li>
+              <li><a href="/about">About</a></li>
+            </ul>
+          </div>
+          <div class="footer-section" id="f1">
+            <h3>Resources</h3>
+            <ul>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">Support</a></li>
+            </ul>
+          </div>
+          <div class="footer-section" id="f2">
+            <h3>Legal</h3>
+            <ul>
+              <li><a href="#">Privacy</a></li>
+              <li><a href="#">Terms</a></li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          &copy; 2025 Smart Road Accident Predictor. All rights reserved.
+        </div>
+      </footer>
+</body>
+</html>
