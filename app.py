@@ -151,7 +151,6 @@ def predict():
 
     return render_template('predict.html', result=result, suggestion=suggestion)
 
-
 # ============ UPLOAD CSV ============
 
 def fig_to_base64(plt_obj):
